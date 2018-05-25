@@ -1,3 +1,5 @@
+import { objToArr } from "../public/tool";
+
 export const movieModule = {
     namespaced:true,
     state:{
@@ -50,6 +52,32 @@ export const movieModule = {
                     statu:e
                 })
             })
+        },
+
+        addNewMovie({ commit, state }){
+            commit({
+                type:'changeStatu',
+                statu:'onAdding'
+            });
+            let toBeAdding = objToArr(state.newItems);
+            fetch('http://localhost:3000/api/add/movie',{
+                body:JSON.stringify(toBeAdding),
+                cache:'no-cache',
+                headers:{
+                    'content-type':'application/json'
+                },
+                method:'post',
+                mode:'cors',
+                referrer:'no-referrer',
+                redirect:'follow',
+            }).then(res=>{
+                commit({
+                    type:'changeStatu',
+                    statu:'success'
+                });
+                commit('removeNewItems');
+                console.log('成功');
+            }).catch(e=>console.log(e));
         }
     }
 }

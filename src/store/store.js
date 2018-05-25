@@ -9,7 +9,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state:{
       openedPage:[],
-      xActiveIndex:'main'
+      xActiveIndex:'main',
+      logginStatu:false
     },
     mutations:{
       openpage(state,payload){   //payload:{type:openpage,behavior:add/remove,item:{title:'电影',name:'1'}}
@@ -29,7 +30,11 @@ const store = new Vuex.Store({
      
      changeindex(state,payload){
        state.xActiveIndex = payload.item;
-     }  
+     },
+
+     changeLogginStatu(state,bo){
+       state.logginStatu = bo;
+     }
     },
 
     getters:{

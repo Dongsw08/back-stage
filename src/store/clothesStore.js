@@ -1,3 +1,5 @@
+import { objToArr } from "../public/tool";
+
 export const clothesModule = {
     namespaced:true,
     state:{
@@ -20,12 +22,12 @@ export const clothesModule = {
                 alert('已添加');
             }
         },
-        removeNewItems(state,payload){
+        removeNewItems(state){
             state.newItems = [];
         },
         changeStatu(state,payload){
             state.requestStatu = payload.statu;
-        }
+        },
     },
     actions:{
         requestClothes({ commit },payload){
@@ -50,6 +52,32 @@ export const clothesModule = {
                     statu:e
                 })
             })
+        },
+        
+        addNewClothes({ commit, state }){
+            commit({
+                type:'changeStatu',
+                statu:'onAdding'
+            });
+            let toBeAdding = objToArr(state.newItems);
+            fetch('http://localhost:3000/api/add/clothes',{
+                body:JSON.stringify(toBeAdding),
+                cache:'no-cache',
+                headers:{
+                    'content-type':'application/json'
+                },
+                method:'post',
+                mode:'cors',
+                referrer:'no-referrer',
+                redirect:'follow',
+            }).then(res=>{
+                commit({
+                    type:'changeStatu',
+                    statu:'success'
+                });
+                commit('removeNewItems');
+                console.log('成功');
+            }).catch(e=>console.log(e));
         }
     }
 }

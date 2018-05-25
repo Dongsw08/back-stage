@@ -29,6 +29,7 @@ const router = new Router({
           path:'movie',
           name:'movie',
           component:Movie,
+          meta:{requiresAuth:true},
           beforeEnter:(to,from,next) => {
               store.commit({
                 type:'openpage',
@@ -46,6 +47,7 @@ const router = new Router({
           path:'fruit',
           name:'fruit',
           component:Fruit,
+          meta:{requiresAuth:true},
           beforeEnter:(to,from,next) => {
               store.commit({
                 type:'openpage',
@@ -63,6 +65,7 @@ const router = new Router({
           path:'clothes',
           name:'clothes',
           component:Clothes,
+          meta:{requiresAuth:true},
           beforeEnter:(to,from,next) => {
               store.commit({
                 type:'openpage',
@@ -80,6 +83,7 @@ const router = new Router({
           path:'confirm',
           name:'confirm',
           component:Confirm,
+          meta:{requiresAuth:true},
           beforeEnter:(to,from,next) => {
               store.commit({
                 type:'openpage',
@@ -103,20 +107,24 @@ const router = new Router({
   ]
 })
 
-/*router.beforeEach((to,from,next) => {
-  console.log(to);
-  
-    store.commit({
-      type:'openpage',
-      behavior:'add',
-      item:to.name
-    });
-    store.commit({
-      type:'changeindex',
-      item:to.name
-    });
-  
-  next();
+/**/router.beforeEach((to,from,next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)){
+    if(sessionStorage.currentUser){
+      store.commit('changeLogginStatu',true);
+      next();
+    }else{
+      store.commit('changeLogginStatu',false);
+      alert('请登陆');
+      next({path:'/'});
+    }
+  }else{
+    if(sessionStorage.currentUser){
+      store.commit('changeLogginStatu',true);
+      next();
+    }else{
+      next();
+    }
+  }
 })
-*/
+
 export default router;

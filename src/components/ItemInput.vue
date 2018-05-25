@@ -64,6 +64,11 @@ export default {
             type:'addNewItem',
             item:_newItem
           });
+          this.form = {
+            id:'',
+            title:'',
+            price:null
+          }
         }else{
           alert(field + '校验失败');
         }
